@@ -244,7 +244,7 @@ class KoDB:
             text = textData.get(1.0,END)
             if data:
                 query = "UPDATE table1 SET FIO = ?, item = ?, image = ? WHERE id=?;"
-                par = (name, text, imageBuffer, data[0])
+                par = (name, text, self.imageBuffer, data[0])
                 self.cursor.execute(query, par)
                 self.cursor.connection.commit()
                 self.memberlist.delete(selected)
@@ -254,7 +254,7 @@ class KoDB:
                 self.listSelect()
             else:
                 query = "INSERT INTO table1(FIO, item, image) VALUES (?,?,?)"
-                par = (name, text, imageBuffer)
+                par = (name, text, self.imageBuffer)
                 self.cursor.execute(query, par)
                 self.cursor.connection.commit()
                 self.memberlist.insert(END, name)
@@ -305,9 +305,9 @@ class KoDB:
             imageBlobQuery = f"SELECT image FROM table1 WHERE id={data[0]}"
             self.cursor.execute(imageBlobQuery)
             dataImgText = self.cursor.fetchall()
-            imageBuffer = dataImgText[0][0]
+            self.imageBuffer = dataImgText[0][0]
 
-            curMiniature = None if not imageBuffer else PhotoImage(data=imageBuffer, format='png').subsample(8,8)
+            curMiniature = None if not self.imageBuffer else PhotoImage(data=self.imageBuffer, format='png').subsample(8,8)
             Icon.create_image(0,0,image=curMiniature, anchor=NW)
             Icon.image = curMiniature
             entryFIO.insert(0, data[1])
